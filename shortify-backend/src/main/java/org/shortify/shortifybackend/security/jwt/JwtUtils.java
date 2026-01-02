@@ -7,12 +7,14 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.shortify.shortifybackend.service.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.time.Instant;
 import java.util.Date;
 
+@Configuration
 public class JwtUtils {
 
     @Value("${jwt.secret}")

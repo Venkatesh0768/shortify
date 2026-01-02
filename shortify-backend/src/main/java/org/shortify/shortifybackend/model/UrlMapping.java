@@ -16,11 +16,9 @@ public class UrlMapping extends BaseModel {
     private String originalUrl;
     private String shortUrl;
     private int clickCount = 0;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
     @OneToMany(mappedBy = "urlMapping", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ClickEvent> clickEvents;
 }
