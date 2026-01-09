@@ -6,14 +6,13 @@ import org.shortify.shortifybackend.dto.UrlMappingDto;
 import org.shortify.shortifybackend.model.User;
 import org.shortify.shortifybackend.service.AuthServiceImpl;
 import org.shortify.shortifybackend.service.UrlMappingService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -30,5 +29,11 @@ public class UrlMappingController {
         User user  = authService.findByUsername(principal.getName());
         UrlMappingDto urlMappingDto = urlMappingService.shortenUrl(originalUrl, user);
         return ResponseEntity.ok(urlMappingDto);
+    }
+
+    @GetMapping("/myurls")
+    public ResponseEntity<List<UrlMappingDto>>  getUserUrls(Principal principal){
+        List<UrlMappingDto> response = urlMappingService.getUrlByUser(principal);
+        return new ResponseEntity<>(response , HttpStatus.OK);
     }
 }

@@ -1,6 +1,5 @@
 package org.shortify.shortifybackend.service;
 
-import org.jspecify.annotations.Nullable;
 import org.shortify.shortifybackend.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -8,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 
 public class UserDetailsImpl implements UserDetails {
@@ -18,12 +16,16 @@ public class UserDetailsImpl implements UserDetails {
     private UUID id;
     private String username;
     private String email;
-
     private String password;
-
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(UUID id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(
+            UUID id,
+            String username,
+            String email,
+            String password,
+            Collection<? extends GrantedAuthority> authorities
+    ) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -32,7 +34,11 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl build(User user) {
-        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole());
+
+        // 🔑 CRITICAL FIX: ROLE_ prefix
+        GrantedAuthority authority =
+                new SimpleGrantedAuthority("ROLE_" + user.getRole());
+
         return new UserDetailsImpl(
                 user.getId(),
                 user.getUsername(),
@@ -56,4 +62,10 @@ public class UserDetailsImpl implements UserDetails {
     public String getUsername() {
         return username;
     }
+
+    // Optional but recommended
+    @Override public boolean isAccountNonExpired() { return true; }
+    @Override public boolean isAccountNonLocked() { return true; }
+    @Override public boolean isCredentialsNonExpired() { return true; }
+    @Override public boolean isEnabled() { return true; }
 }
