@@ -11,4 +11,5 @@ import java.util.UUID;
 @Repository
 public interface UrlMappingRepository extends JpaRepository<UrlMapping, UUID> {
     List<UrlMapping> findByUser(User user);
+    UrlMapping findByShortUrl(String shorturl);
 }

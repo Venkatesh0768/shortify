@@ -1,23 +1,25 @@
 package org.shortify.shortifybackend.service;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.transaction.Transactional;
 import org.shortify.shortifybackend.model.User;
 import org.shortify.shortifybackend.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
         return UserDetailsImpl.build(user);
     }
 }

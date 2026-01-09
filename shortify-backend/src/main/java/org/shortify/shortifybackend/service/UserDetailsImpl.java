@@ -1,5 +1,7 @@
 package org.shortify.shortifybackend.service;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.shortify.shortifybackend.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,23 +11,20 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
+@Data
+@NoArgsConstructor
 public class UserDetailsImpl implements UserDetails {
-
     private static final long serialVersionUID = 1L;
 
     private UUID id;
     private String username;
     private String email;
+
     private String password;
+
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(
-            UUID id,
-            String username,
-            String email,
-            String password,
-            Collection<? extends GrantedAuthority> authorities
-    ) {
+    public UserDetailsImpl(UUID id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -34,11 +33,7 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl build(User user) {
-
-        // 🔑 CRITICAL FIX: ROLE_ prefix
-        GrantedAuthority authority =
-                new SimpleGrantedAuthority("ROLE_" + user.getRole());
-
+        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole());
         return new UserDetailsImpl(
                 user.getId(),
                 user.getUsername(),
@@ -62,10 +57,4 @@ public class UserDetailsImpl implements UserDetails {
     public String getUsername() {
         return username;
     }
-
-    // Optional but recommended
-    @Override public boolean isAccountNonExpired() { return true; }
-    @Override public boolean isAccountNonLocked() { return true; }
-    @Override public boolean isCredentialsNonExpired() { return true; }
-    @Override public boolean isEnabled() { return true; }
 }
