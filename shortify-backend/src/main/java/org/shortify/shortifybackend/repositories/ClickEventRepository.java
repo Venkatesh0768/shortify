@@ -10,6 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ClickEventRepository extends JpaRepository<ClickEvent, UUID> {
-    List<ClickEvent> findByUrlMappingAndClickDateBetween(UrlMapping urlMapping , LocalDateTime start , LocalDateTime end);
-    List<ClickEvent> findByUrlMappingInAndClickDateBetween(List<UrlMapping> urlMapping , LocalDate start , LocalDate end);
+    List<ClickEvent> findByUrlMappingAndCreatedAtBetween(UrlMapping urlMapping , LocalDateTime start , LocalDateTime end);
+    List<ClickEvent> findByUrlMappingInAndCreatedAtBetween(List<UrlMapping> urlMapping , LocalDate start , LocalDate end);
 }
